@@ -5,6 +5,7 @@
 Train::Train() : countOp(0), first(nullptr) {
   std::srand(std::time(0));
 }
+
 Train::~Train() {
   if (!first) return;
   Car* current = first->next;
