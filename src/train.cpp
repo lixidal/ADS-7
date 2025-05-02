@@ -1,5 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
+#include <vector>
 
 Train::Train() : countOp(0), first(nullptr) {
   std::srand(std::time(0));
@@ -34,76 +35,35 @@ void Train::addCar(bool light) {
 
 int Train::getLength() {
   if (!first) return 0;
-
+  
   countOp = 0;
-  bool allLightsOff = true;
   Car* current = first;
-
-  do {
+  
+  while (true) {
     if (current->light) {
-      allLightsOff = false;
-      break;
-    }
-    current = current->next;
-    countOp++;
-  } while (current != first);
-
-  if (allLightsOff) {
-    first->light = true;
-    countOp++;
-
-    Car* explorer = first->next;
-    int length = 1;
-
-    while (true) {
+      current->light = false;
       countOp++;
-      if (explorer->light) {
-        explorer->light = false;
-        countOp += length;
-        for (int i = 0; i < length; ++i) {
-          explorer = explorer->prev;
+      
+      for (int steps = 1; ; steps++) {
+        current = current->next;
+        countOp++;
+        
+        if (current->light) {
+          current->light = false;
+          countOp += steps;
+          for (int i = 0; i < steps; i++) {
+            current = current->prev;
+          }
+          break;
         }
-        if (!explorer->light) {
-          return length;
-        } else {
-          length = 1;
-          explorer = explorer->next;
-        }
-      } else {
-        length++;
-        explorer = explorer->next;
       }
-    }
-  } else {
-    Car* explorer = first;
-    while (!explorer->light) {
-      explorer = explorer->next;
+      
+      if (!current->light) {
+        return countOp / 2;
+      }
+    } else {
+      current = current->next;
       countOp++;
-    }
-    explorer->light = false;
-    countOp++;
-
-    int length = 1;
-    Car* marker = explorer;
-    explorer = explorer->next;
-
-    while (true) {
-      countOp++;
-      if (explorer == marker) {
-        return length;
-      }
-      if (explorer->light) {
-        explorer->light = false;
-        countOp += length;
-        for (int i = 0; i < length; ++i) {
-          explorer = explorer->prev;
-        }
-        length = 1;
-        explorer = explorer->next;
-      } else {
-        length++;
-        explorer = explorer->next;
-      }
     }
   }
 }
