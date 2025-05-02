@@ -7,16 +7,18 @@
 #include <ctime>
 
 class Train {
-private:
+ private:
   struct Car {
     bool light;
     Car* next;
     Car* prev;
   };
+
   int countOp;
   Car* first;
   std::vector<bool> initialLights;
-public:
+
+ public:
   Train();
   ~Train();
   void addCar(bool light);
