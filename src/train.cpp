@@ -18,7 +18,6 @@ Train::~Train() {
   }
   delete first;
 }
-
 void Train::addCar(bool light) {
   Car* newCar = new Car{light, nullptr, nullptr};
   if (!first) {
@@ -33,27 +32,23 @@ void Train::addCar(bool light) {
     first->prev = newCar;
   }
 }
-
 int Train::getLength() {
   if (!first) return 0;
   countOp = 0;
   Car* current = first;
-  while (!current->light && countOp < 100000) {
+  while (!current->light) {
     current = current->next;
-    countOp++;
     if (current == first) break;
   }
   if (!current->light) {
     first->light = true;
-    countOp++;
     current = first;
   }
   current->light = false;
-  countOp++;
+  countOp = 1;
   int length = 1;
   Car* marker = current;
   current = current->next;
-
   while (true) {
     countOp++;
     if (current == marker) {
@@ -62,7 +57,6 @@ int Train::getLength() {
     if (current->light) {
       current->light = false;
       countOp += length;
-      // Возвращаемся назад
       for (int i = 0; i < length; i++) {
         current = current->prev;
       }
@@ -74,11 +68,9 @@ int Train::getLength() {
     }
   }
 }
-
 int Train::getOpCount() const {
   return countOp;
 }
-
 void Train::resetTrain(const std::vector<bool>& lights) {
   if (first) {
     Car* current = first->next;
@@ -90,6 +82,10 @@ void Train::resetTrain(const std::vector<bool>& lights) {
     delete first;
     first = nullptr;
   }
+  for (bool light : lights) {
+    addCar(light);
+  }
+}
   for (bool light : lights) {
     addCar(light);
   }
