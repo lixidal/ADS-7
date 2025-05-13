@@ -36,27 +36,20 @@ void Train::addCar(bool light) {
 
 int Train::getLength() {
   if (!first) return 0;
-
   countOp = 0;
   Car* current = first;
-
-  // Ищем первую включенную лампочку
-  while (!current->light) {
+  while (!current->light && countOp < 100000) {
     current = current->next;
     countOp++;
-    if (current == first) {
-      // Все лампочки выключены - включаем одну
-      first->light = true;
-      countOp++;
-      current = first;
-      break;
-    }
+    if (current == first) break;
   }
-
-  // Выключаем найденную лампочку
+  if (!current->light) {
+    first->light = true;
+    countOp++;
+    current = first;
+  }
   current->light = false;
   countOp++;
-
   int length = 1;
   Car* marker = current;
   current = current->next;
@@ -69,6 +62,7 @@ int Train::getLength() {
     if (current->light) {
       current->light = false;
       countOp += length;
+      // Возвращаемся назад
       for (int i = 0; i < length; i++) {
         current = current->prev;
       }
