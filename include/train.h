@@ -19,7 +19,7 @@ class Train {
   void addCar(bool light);
   int getLength();
   int getOpCount();
-  void moveForward();
+  void moveForward(int steps = 1);
   void moveBackward();
   bool isLightOn();
   void turnLightOn();
