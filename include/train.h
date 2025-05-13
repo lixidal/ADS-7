@@ -2,25 +2,28 @@
 #ifndef INCLUDE_TRAIN_H_
 #define INCLUDE_TRAIN_H_
 
-#include <vector>
-
 class Train {
- private:
+private:
   struct Car {
     bool light;
     Car* next;
     Car* prev;
   };
-
   int countOp;
   Car* first;
+  Car* current;
 
- public:
+public:
   Train();
   ~Train();
   void addCar(bool light);
   int getLength();
-  int getOpCount() const;
-  void resetTrain(const std::vector<bool>& lights);
+  int getOpCount();
+  void moveForward();
+  void moveBackward();
+  bool isLightOn();
+  void turnLightOn();
+  void turnLightOff();
+  void resetPosition();
 };
 #endif  // INCLUDE_TRAIN_H_
