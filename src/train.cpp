@@ -47,7 +47,6 @@ int Train::getLength() {
   do {
     moveForward();
     length++;
-    
     if (isLightOn() && length > 1) {
       turnLightOff();
       countOp++;
