@@ -38,40 +38,24 @@ int Train::getLength() {
   if (!first) return 0;
   resetPosition();
   int length = 0;
-  bool anyLightOn = false;
-  Car* start = first;
-  do {
-    if (isLightOn()) {
-      anyLightOn = true;
-      break;
-    }
-    moveForward();
-  } while (current != start);
-  if (!anyLightOn) {
+  bool markerCreated = false;
+  if (!isLightOn()) {
     turnLightOn();
     countOp++;
+    markerCreated = true;
   }
-  while (!isLightOn()) {
+  do {
     moveForward();
-  }
-  turnLightOff();
-  countOp++;
-  moveForward();
-  length = 1;
-  while (true) {
-    if (isLightOn()) {
+    length++;
+    
+    if (isLightOn() && length > 1) {
       turnLightOff();
       countOp++;
-      length += getOpCount();
-      resetPosition();
-      moveForward(length);
-      countOp = length;
-    } else {
-      moveForward();
     }
-    if (!isLightOn() && getOpCount() == length) {
-      break;
-    }
+  } while (!(isLightOn() && length > 1) || (markerCreated && length == 1));
+  if (markerCreated) {
+    turnLightOff();
+    countOp++;
   }
   return length;
 }
@@ -94,6 +78,10 @@ void Train::turnLightOn() {
 void Train::turnLightOff() {
   if (!current) first->light = false;
   else current->light = false;
+}
+void Train::resetPosition() {
+  current = first;
+}
 }
 void Train::resetPosition() {
   current = first;
