@@ -27,6 +27,13 @@ void Train::addCar(bool light) {
     first->prev = newCar;
   }
 }
+void Train::moveForward(int steps) {
+  if (!current) current = first;
+  while (steps-- > 0) {
+    current = current->next;
+    countOp++;
+  }
+}
 int Train::getLength() {
   if (!first) return 0;
   resetPosition();
@@ -71,12 +78,6 @@ int Train::getLength() {
 int Train::getOpCount() {
   return countOp;
 }
-void Train::moveForward() {
-  if (!current) current = first;
-  current = current->next;
-  countOp++;
-}
-
 void Train::moveBackward() {
   if (!current) current = first;
   current = current->prev;
