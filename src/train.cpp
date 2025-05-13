@@ -1,6 +1,8 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 Train::Train() : countOp(0), first(nullptr) {
   std::srand(std::time(0));
@@ -16,6 +18,7 @@ Train::~Train() {
   }
   delete first;
 }
+
 void Train::addCar(bool light) {
   Car* newCar = new Car{light, nullptr, nullptr};
   if (!first) {
@@ -29,40 +32,59 @@ void Train::addCar(bool light) {
     newCar->next = first;
     first->prev = newCar;
   }
-  initialLights.push_back(light);
 }
+
 int Train::getLength() {
   if (!first) return 0;
+
   countOp = 0;
   Car* current = first;
+
+  // Ищем первую включенную лампочку
+  while (!current->light) {
+    current = current->next;
+    countOp++;
+    if (current == first) {
+      // Все лампочки выключены - включаем одну
+      first->light = true;
+      countOp++;
+      current = first;
+      break;
+    }
+  }
+
+  // Выключаем найденную лампочку
+  current->light = false;
+  countOp++;
+
+  int length = 1;
+  Car* marker = current;
+  current = current->next;
+
   while (true) {
+    countOp++;
+    if (current == marker) {
+      return length;
+    }
     if (current->light) {
       current->light = false;
-      countOp++;
-      for (int steps = 1; ; steps++) {
-        current = current->next;
-        countOp++;
-        if (current->light) {
-          current->light = false;
-          countOp += steps;
-          for (int i = 0; i < steps; i++) {
-            current = current->prev;
-          }
-          break;
-        }
+      countOp += length;
+      for (int i = 0; i < length; i++) {
+        current = current->prev;
       }
-      if (!current->light) {
-        return countOp / 2;
-      }
-    } else {
+      length = 1;
       current = current->next;
-      countOp++;
+    } else {
+      length++;
+      current = current->next;
     }
   }
 }
+
 int Train::getOpCount() const {
   return countOp;
 }
+
 void Train::resetTrain(const std::vector<bool>& lights) {
   if (first) {
     Car* current = first->next;
@@ -74,7 +96,7 @@ void Train::resetTrain(const std::vector<bool>& lights) {
     delete first;
     first = nullptr;
   }
-  initialLights.clear();
+  
   for (bool light : lights) {
     addCar(light);
   }
