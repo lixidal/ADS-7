@@ -90,7 +90,6 @@ void Train::resetTrain(const std::vector<bool>& lights) {
     delete first;
     first = nullptr;
   }
-  
   for (bool light : lights) {
     addCar(light);
   }
