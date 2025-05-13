@@ -3,8 +3,6 @@
 #define INCLUDE_TRAIN_H_
 
 #include <vector>
-#include <cstdlib>
-#include <ctime>
 
 class Train {
  private:
@@ -16,7 +14,6 @@ class Train {
 
   int countOp;
   Car* first;
-  std::vector<bool> initialLights;
 
  public:
   Train();
@@ -26,5 +23,4 @@ class Train {
   int getOpCount() const;
   void resetTrain(const std::vector<bool>& lights);
 };
-
 #endif  // INCLUDE_TRAIN_H_
