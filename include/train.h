@@ -6,24 +6,15 @@ class Train {
  private:
   struct Car {
     bool light;
-    Car* next;
-    Car* prev;
+    Car *next;
+    Car *prev;
   };
   int countOp;
-  Car* first;
-  Car* current;
-
+  Car *first;
  public:
   Train();
-  ~Train();
   void addCar(bool light);
   int getLength();
-  int getOpCount();
-  void moveForward(int steps = 1);
-  void moveBackward();
-  bool isLightOn();
-  void turnLightOn();
-  void turnLightOff();
-  void resetPosition();
+  int getOpCount(); 
 };
 #endif  // INCLUDE_TRAIN_H_
