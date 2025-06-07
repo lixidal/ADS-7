@@ -15,6 +15,6 @@ class Train {
   Train();
   void addCar(bool light);
   int getLength();
-  int getOpCount(); 
+  int getOpCount();
 };
 #endif  // INCLUDE_TRAIN_H_
